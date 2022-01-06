@@ -3,7 +3,7 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 
-np.random.seed(100)
+#np.random.seed(100)
 
 # Tato třída reprezentuje vrstvu (skrytou nebo výstupní) v neuronové síti.
 class Vrstva:
@@ -34,7 +34,13 @@ class Vrstva:
 
         r = np.dot(x, self.vahy) + self.bias
         self.posledni_aktivace = self._aplikuj_aktivacni_fce(r)
+
+       # print(x, r, self.posledni_aktivace)
+
+
         return self.posledni_aktivace
+
+
 
     def _aplikuj_aktivacni_fce(self, r):
         """
@@ -71,10 +77,6 @@ class Vrstva:
 # Tato třída reprezentuje neuronovou síť.
 class NeuralNetwork:
 
-
-
-
-
     def __init__(self):
         self._sit = []
 
@@ -97,6 +99,8 @@ class NeuralNetwork:
             X = vrstva.aktivace(X)
 
         return X
+
+        print(X)
 
     def predikce(self, X):
         """
@@ -178,28 +182,42 @@ class NeuralNetwork:
 """
 if __name__ == '__main__':
     nn = NeuralNetwork()
-    nn.pridat_vrstvu(Vrstva(2, 3, 'tanh'))         #skrytá vrstva
-    nn.pridat_vrstvu(Vrstva(3, 1, 'sigmoid'))      #výstupní vrstva
+    nn.pridat_vrstvu(Vrstva(1, 10, 'tanh'))         #skrytá vrstva
+    nn.pridat_vrstvu(Vrstva(10, 1, 'tanh'))      #výstupní vrstva
 
     # Definice vstupů a výstupů
+    # Výroková logika OR
+    #X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    #y = np.array([[0], [1], [1], [1]])
 
-    X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-    y = np.array([[0], [1], [1], [1]])
+    X = np.array([[-3.0], [-2.5], [-2.0],
+                  [-1.5], [-1.0], [-0.5],
+                  [0.0], [0.5], [1.0],
+                  [1.5], [2.0], [2.5], [3.0]])
+
+    y = [np.tanh(n) for n in X]
 
     # Trénování neuronové sítě
-    chyby = nn.trenovani(X, y, 1, 201)
+    chyby = nn.trenovani(X, y, 0.01, 1001)
 #    print("Přesnost: %.2f%%" % (nn.presnost(nn.predikce(X)[:,0].T, y.flatten()) * 100))
     print("Očekávané výstupy: \n" + str(y))
     print("Odhadované výstupy: \n" + str(nn.predikce(X)))
 
-"""
+
+    #print(nn._sit)
+    #for layer in nn._sit:
+    #    print(layer.vahy, layer.bias, layer.delta)
+
+    outputs = [nn.feed_forward(a) for a in X]
+    print(outputs)
+
     plt.title("numpy.tanh()")
-    plt.plot(X, color = 'green')
-    plt.plot(y, color = 'red')
+    plt.plot(X, outputs, color = 'green')
+    plt.plot(X, y, color = 'red')
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.show()
-"""
+
 """
     # Vygenerování grafu vývoje chyby MSE
     plt.plot(chyby, c = 'b', label = 'MSE')
