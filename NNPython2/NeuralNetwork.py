@@ -98,14 +98,17 @@ plt.show()
 X = np.array(diff_norm_inputs)
 y = np.array(diff_norm_avg_temps)
 
+print(X)
+print(y)
+
 X_train, X_tests = ratio_list_split(X, 0.75)
 y_train, y_tests = ratio_list_split(X, 0.75)
 print(len(X_train), len(X_tests), len(y_train), len(y_tests))
 
 # II. varianta
-dataset = [(X, np.array([y])) for X, y in zip(diff_norm_inputs, diff_norm_avg_temps)]
-random.shuffle(dataset)
-print(dataset[0:5])
+#dataset = [(X, np.array([y])) for X, y in zip(diff_norm_inputs, diff_norm_avg_temps)]
+#random.shuffle(dataset)
+#print(dataset[0:5])
 
 #training_data, test_data = ratio_list_split(dataset, 0.75)
 #print(len(training_data), len(test_data), len(dataset), training_data[0])
@@ -273,17 +276,6 @@ class NeuralNetwork:
                 print('Epocha: #%s, MSE: %f' % (i, float(mse)))
 
         return mses
-
-#    @staticmethod
-#    def presnost(y_pred, y_true):
-
-#        Metoda, která vypočítá přesnost mezi predikovanými a očekávanými hodnotami.
-#        :param y_pred: Predikované hodnoty výstupu.
-#        :param y_true: Očekávané hodnoty výstupu.
-#        :return: Vypočtená přesnost.
-
-#        return ((np.round(y_pred, 1) == y_true)).mean()
-
 
 
 """
