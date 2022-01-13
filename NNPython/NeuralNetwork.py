@@ -1,9 +1,6 @@
 # Import knihoven
 import numpy as np
-import math
 import matplotlib.pyplot as plt
-
-#np.random.seed(100)
 
 # Tato třída reprezentuje vrstvu (skrytou nebo výstupní) v neuronové síti.
 class Vrstva:
@@ -37,10 +34,7 @@ class Vrstva:
 
        # print(x, r, self.posledni_aktivace)
 
-
         return self.posledni_aktivace
-
-
 
     def _aplikuj_aktivacni_fce(self, r):
         """
@@ -83,7 +77,7 @@ class NeuralNetwork:
     def pridat_vrstvu(self, vrstva):
         """
         Metoda, která vytvoří vrstvu v neuronové sítě.
-        :param Vrstva vrstva: Vrstva k vytvoření.
+        :param vrstva: Vrstva k vytvoření.
         """
 
         self._sit.append(vrstva)
@@ -99,8 +93,6 @@ class NeuralNetwork:
             X = vrstva.aktivace(X)
 
         return X
-
-        print(X)
 
     def predikce(self, X):
         """
@@ -167,23 +159,14 @@ class NeuralNetwork:
 
         return mses
 
-#    @staticmethod
-#    def presnost(y_pred, y_true):
-
-#        Metoda, která vypočítá přesnost mezi predikovanými a očekávanými hodnotami.
-#        :param y_pred: Predikované hodnoty výstupu.
-#        :param y_true: Očekávané hodnoty výstupu.
-#        :return: Vypočtená přesnost.
-
-#        return ((np.round(y_pred, 1) == y_true)).mean()
 
 """
     Inicializace
 """
 if __name__ == '__main__':
     nn = NeuralNetwork()
-    nn.pridat_vrstvu(Vrstva(1, 10, 'tanh'))         #skrytá vrstva
-    nn.pridat_vrstvu(Vrstva(10, 1, 'tanh'))      #výstupní vrstva
+    nn.pridat_vrstvu(Vrstva(1, 50, 'tanh'))         #skrytá vrstva
+    nn.pridat_vrstvu(Vrstva(50, 1, 'tanh'))      #výstupní vrstva
 
     # Definice vstupů a výstupů
     # Výroková logika OR
@@ -198,8 +181,7 @@ if __name__ == '__main__':
     y = [np.tanh(n) for n in X]
 
     # Trénování neuronové sítě
-    chyby = nn.trenovani(X, y, 0.01, 1001)
-#    print("Přesnost: %.2f%%" % (nn.presnost(nn.predikce(X)[:,0].T, y.flatten()) * 100))
+    chyby = nn.trenovani(X, y, 0.1, 5001)
     print("Očekávané výstupy: \n" + str(y))
     print("Odhadované výstupy: \n" + str(nn.predikce(X)))
 
@@ -211,21 +193,20 @@ if __name__ == '__main__':
     outputs = [nn.feed_forward(a) for a in X]
     print(outputs)
 
-    plt.title("numpy.tanh()")
-    plt.plot(X, outputs, color = 'green')
-    plt.plot(X, y, color = 'red')
+    # VYgenerování grafu porovnání zvolené funkce a aproximace
+    plt.title("Porovnání zvolené funkce a apraoximace ")
+    plt.plot(X, outputs, color = 'blue', label = 'Natrénovaná funkce')
+    plt.plot(X, y, color = 'red', label = 'Funkce tanh')
     plt.xlabel("X")
     plt.ylabel("Y")
+    plt.legend()
     plt.show()
 
-"""
     # Vygenerování grafu vývoje chyby MSE
-    plt.plot(chyby, c = 'b', label = 'MSE')
     plt.title('Vývoj chyby MSE')
+    plt.plot(chyby, c = 'b', label = 'MSE')
     plt.xlabel('Epochy')
     plt.ylabel('MSE')
     plt.grid(linestyle='-.', linewidth=0.5)
     plt.legend()
     plt.show()
-"""
-
